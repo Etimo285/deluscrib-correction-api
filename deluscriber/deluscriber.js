@@ -3,6 +3,7 @@
 const puppeteer = require('puppeteer')
 const clipboard = require("node-clipboardy")
 const { selectors } = require('./deluscrib.json')
+const { verify } = require('crypto')
 
 class Deluscriber {
   constructor () {
@@ -11,7 +12,7 @@ class Deluscriber {
     this.scribFrame = null
   }
 
-  async init (headless = true, slowMo = 0) {
+  async init ({ headless = true, slowMo = 0 }) {
     this.browser = await puppeteer.launch({ headless, slowMo })
     this.page = await this.browser.newPage()
 
@@ -85,8 +86,14 @@ class Deluscriber {
 
 async function main () {
   const deluscriber = new Deluscriber()
-  await deluscriber.init(false, 50)
-  await deluscriber.close()
+  await deluscriber.init({ headless: false })
+  deluscriber.copyToClipboard('Salut ses moi le bea goss !')
+  await deluscriber.pasteFromClipboard()
+  await deluscriber.verify()
+  await deluscriber.correctErrors()
+  const text = await deluscriber.getCorrection()
+  console.log(text)
+  deluscriber.close()
 }
 
 if (require.main === module) {
