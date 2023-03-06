@@ -22,7 +22,7 @@
       "/correct": {
         "post": {
           "tags": [
-            "translate"
+            "correct"
           ],
           "summary": "Correct a sentence",
           "description": "This is so fun",
@@ -78,7 +78,7 @@
       "schemas": {
         "sentence": {
           "type": "string",
-          "description": "The sentence to translate",
+          "description": "The sentence to correct",
           "example": "frase corijé!"
         },
         "correction": {

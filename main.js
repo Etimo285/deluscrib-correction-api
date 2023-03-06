@@ -2,7 +2,7 @@
 
 require('dotenv').config()
 
-const deluooderFactory = require('./deluscriber/deluscriberFactory')
+const deluscriberFactory = require('./deluscriber/deluscriberFactory')
 
 const express = require('express')
 const app = express()
@@ -19,8 +19,20 @@ const port = process.env.PORT || '80'
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.post('/correct', async (req, res) => {
+  const text = req.body.sentence
 
-  res.send({ "correction": "phrase corrigée!" })
+  const deluscrib = deluscriberFactory.create()
+
+  await deluscrib.init(false)
+  deluscrib.copyToClipboard(text)
+  await deluscrib.pasteFromClipboard()
+  await deluscrib.verify()
+  await deluscrib.correctErrors()
+
+  const correction = await deluscrib.getCorrection()
+  deluscrib.close()
+
+  res.send({ correction })
 })
 
 app.listen(port, hostname, () => {

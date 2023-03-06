@@ -1,5 +1,6 @@
 const { default: puppeteer } = require("puppeteer");
 const clipboard = require("node-clipboardy");
+const { selectors } = require("./deluscriber/deluscrib.json");
 
 clipboard.write(`Quoique l'actualité nous laisse penser, ne désespérons pas trop vite de la nature humaine... Il y a peu, dans le Nord de la France, un super-marché a été laissé grand ouvert l'après-midi alors qu'il était sensé fermer ses portes à 13 heures : la faute à une employée étonamment distraite, par trop impatiente de regagner ses chères pénates ! Et bien, si bizzare que cela puisse paraître, aucun vol, aucune dégradation ne furent à déplorer. Éberlués que personne ne fut là pour les acceuillir, les clients, le premier moment de surprise passée, ont alerté la police ! Gageons que ces citoyens comme on en fait plus se seront vus remplir leur carte de fidélité : par les temps qui courent, on serait malvenu à mégotter...`);
 
@@ -32,31 +33,31 @@ clipboard.write(`Quoique l'actualité nous laisse penser, ne désespérons pas t
 
   // Accept cookies
   await page.waitForNetworkIdle();
-  const consentFrame = page.frames().find(f => f.url().startsWith('https://cdn.privacy-mgmt.com/'));
-  await consentFrame.click('button[title="Accepter et Fermer"]');
+  const cookiesFrame = page.frames().find(f => f.url().startsWith('https://cdn.privacy-mgmt.com/'));
+  await cookiesFrame.click(selectors.acceptCookies);
   
-  // Wait for the mainFrame to load
-  await page.waitForSelector('#FrameTx');
+  // Wait for the scribFrame to load
+  await page.waitForSelector(selectors.scribFrame);
 
-  const mainFrame = page.frames().find(f => f.name() === 'FrameTx');
-  await mainFrame.click('body');
+  const scribFrame = page.frames().find(f => f.name() === 'FrameTx');
+  await scribFrame.click('body');
   await page.keyboard.down('Control');
   await page.keyboard.press('V');
   await page.keyboard.up('Control');
 
-  await page.click('#check');
-  await page.waitForSelector('#PanelWait', {hidden: true});
+  await page.click(selectors.verify);
+  await page.waitForSelector(selectors.loadingPanel, { hidden: true });
 
-  let els = await mainFrame.$$('.s-rg, .s-bl, .s-ve, .s-or');
+  let els = await scribFrame.$$(selectors.errorWords);
   while (els.length > 0) {
-    els = await mainFrame.$$('.s-rg, .s-bl, .s-ve, .s-or');
+    els = await scribFrame.$$(selectors.errorWords);
     for (const el of els) {
       await el.click();
-      await page.click('.Cor-PopupPanelListeSol>div:first-child>div').catch((err)=>{});
+      await page.click(selectors.firstChoice).catch((err)=>{});
     }
   }
   
-  let text = await mainFrame.$eval('body', el => el.innerText);
+  let text = await scribFrame.$eval('body', el => el.innerText);
   console.log(text);
 
 })();
