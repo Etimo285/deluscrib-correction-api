@@ -1,0 +1,24 @@
+{
+  "name": "deluscrib-correction-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Etimo285/deluscrib-correction-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Etimo285/deluscrib-correction-api/issues"
+  },
+  "homepage": "https://github.com/Etimo285/deluscrib-correction-api#readme",
+  "dependencies": {
+    "node-clipboardy": "^1.0.3",
+    "puppeteer": "^19.7.2"
+  }
+}
