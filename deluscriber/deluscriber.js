@@ -3,7 +3,6 @@
 const puppeteer = require('puppeteer')
 const clipboard = require("node-clipboardy")
 const { selectors } = require('./deluscrib.json')
-const { verify } = require('crypto')
 
 class Deluscriber {
   constructor () {
@@ -12,7 +11,7 @@ class Deluscriber {
     this.scribFrame = null
   }
 
-  async init ({ headless = true, slowMo = 0 }) {
+  async init (options = { headless: true, slowMo: 0 }) {
     this.browser = await puppeteer.launch({ headless, slowMo })
     this.page = await this.browser.newPage()
 
@@ -63,6 +62,11 @@ class Deluscriber {
     await this.page.waitForSelector(selectors.loadingPanel, { hidden: true })
   }
 
+  async setExample () {
+    await this.page.click(selectors.exampleText)
+    await this.page.waitForTimeout(1000)
+  }
+
   async correctErrors () {
     let els = await this.scribFrame.$$(selectors.errorWords)
     while (els.length > 0) {
@@ -87,8 +91,9 @@ class Deluscriber {
 async function main () {
   const deluscriber = new Deluscriber()
   await deluscriber.init({ headless: false })
-  deluscriber.copyToClipboard('Salut ses moi le bea goss !')
-  await deluscriber.pasteFromClipboard()
+  await deluscriber.setExample()
+  //deluscriber.copyToClipboard('Salut ses moi le beeau goss !')
+  //await deluscriber.pasteFromClipboard()
   await deluscriber.verify()
   await deluscriber.correctErrors()
   const text = await deluscriber.getCorrection()

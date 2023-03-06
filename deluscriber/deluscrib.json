@@ -3,6 +3,7 @@
         "acceptCookies": "button[title='Accepter et Fermer']",
         "scribFrame": "#FrameTx",
         "verify": "#check",
+        "exampleText": "#SampleText",
         "loadingPanel": "#PanelWait",
         "errorWords": ".s-rg, .s-bl, .s-ve, .s-or",
         "firstChoice": ".Cor-PopupPanelListeSol>div:first-child>div"
