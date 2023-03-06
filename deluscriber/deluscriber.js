@@ -12,10 +12,10 @@ class Deluscriber {
   }
 
   async init (options = { headless: true, slowMo: 0 }) {
-    this.browser = await puppeteer.launch({ headless, slowMo })
+    this.browser = await puppeteer.launch(options)
     this.page = await this.browser.newPage()
 
-    await this.page.goto('https://scribens.fr/')
+    await this.page.goto('https://scribens.fr/', { waitUntil: 'domcontentloaded' })
 
     await this.page.setRequestInterception(true)
 
@@ -90,10 +90,9 @@ class Deluscriber {
 
 async function main () {
   const deluscriber = new Deluscriber()
-  await deluscriber.init({ headless: false })
-  await deluscriber.setExample()
-  //deluscriber.copyToClipboard('Salut ses moi le beeau goss !')
-  //await deluscriber.pasteFromClipboard()
+  await deluscriber.init({ headless: false }) 
+  deluscriber.copyToClipboard('Salut ses moi le beeau goss !')
+  await deluscriber.pasteFromClipboard()
   await deluscriber.verify()
   await deluscriber.correctErrors()
   const text = await deluscriber.getCorrection()
