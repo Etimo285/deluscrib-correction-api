@@ -1,0 +1,92 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Deluscrib Correct",
+      "description": "A deluscrib corrector API",
+      "contact": {
+        "email": ""
+      },
+      "version": "1.0"
+    },
+    "externalDocs": {
+      "description": "Deluscrib Corrector on Github",
+      "url": "https://github.com/Etimo285/deluscrib-correction-api"
+    },
+    "tags": [
+      {
+        "name": "correct",
+        "description": "Correct routes"
+      }
+    ],
+    "paths": {
+      "/correct": {
+        "post": {
+          "tags": [
+            "translate"
+          ],
+          "summary": "Correct a sentence",
+          "description": "This is so fun",
+          "operationId": "correct",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "description": "the sentence to correct",
+                "required": true,
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "sentence"
+                  ],
+                  "properties": {
+                    "sentence": {
+                      "$ref": "#/components/schemas/sentence"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "required": [
+                      "correction"
+                    ],
+                    "properties": {
+                      "correction": {
+                        "schema": {
+                          "$ref": "#/components/schemas/correction"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid status value"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "sentence": {
+          "type": "string",
+          "description": "The sentence to translate",
+          "example": "frase corijé!"
+        },
+        "correction": {
+          "type": "string",
+          "description": "The corrected sentence",
+          "example": "Phrase corrigée!"
+        }
+      }
+    }
+  }
+  
